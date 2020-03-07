@@ -1,7 +1,15 @@
 ﻿@using System.Net.Http
+@using System.Threading
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.JSInterop
 @using WeatherWars.Client
 @using WeatherWars.Client.Shared
+@using WeatherWars.Client.Components 
+@using WeatherClientLib
+@using WeatherClientLib.Model
+@using Geolocation = AspNetMonsters.Blazor.Geolocation.Location
+@using GeolocationService = AspNetMonsters.Blazor.Geolocation.LocationService
+@using Blazored.LocalStorage

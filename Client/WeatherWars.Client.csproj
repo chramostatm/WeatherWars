@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetMonsters.Blazor.Geolocation" Version="0.5.0-preview1" />
+    <PackageReference Include="Blazored.LocalStorage" Version="2.1.1" />
     <PackageReference Include="BlazorGoogleMaps" Version="0.5.5" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.2.0-preview1.20073.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="3.2.0-preview1.20073.1" PrivateAssets="all" />
@@ -13,6 +15,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview1.20073.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BlazorWeather-master\BlazorWeather-master\WeatherClientLib\WeatherClientLib.csproj" />
     <ProjectReference Include="..\Shared\WeatherWars.Shared.csproj" />
   </ItemGroup>
 
