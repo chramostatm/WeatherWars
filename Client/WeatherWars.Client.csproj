@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview1.20073.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BlazorWeather-master\BlazorWeather-master\WeatherClientLib\WeatherClientLib.csproj" />
+    <ProjectReference Include="..\..\WeatherWars\WeatherClientLib\WeatherClientLib.csproj" />
     <ProjectReference Include="..\Shared\WeatherWars.Shared.csproj" />
   </ItemGroup>
 
