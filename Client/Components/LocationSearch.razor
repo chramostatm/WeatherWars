@@ -73,7 +73,7 @@
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     locations = results;
-                    noResults = locations.Length == 0;
+                    noResults = (locations.Length == 0);
                     currentSearchCts = null;
                 }
             }
