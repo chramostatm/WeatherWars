@@ -2,51 +2,56 @@
 @implements IDisposable
 @inject IWeatherForecastService WeatherForecastService
 @inject PinnedLocationsService PinnedLocationsService
+@using GoogleMapsComponents
+@using GoogleMapsComponents.Maps
 
-<div id="main" class="@GetBackgroundClass()">
-    <div class="weather-now">
-        <h1 class="page-title">BLAZOR WEATHER</h1>
 
-        <LocationSearch LocationChanged="LocationChanged" />
+    <div id="main" class="@GetBackgroundClass()">
+        <div class="weather-now">
+            <h1 class="page-title">BLAZOR WEATHER</h1>
 
-        @if (currentWeather == null)
-        {
-            <p><em>Search for a city, or use your current location.</em></p>
-        }
-        else
-        {
-            <div class="pinnable-location">
-                <h1>@currentLocation.LocalizedName.ToUpper()</h1>
-                <PushPin IsChecked="@currentLocation.IsPinned" IsCheckedChanged="PinLocation" />
-            </div>
+            <LocationSearch LocationChanged="LocationChanged" />
 
-            <div class="location-carousel">
-                <img src="@GetCurrentLocationImage()" />
-                @if (ShowPinnedLocations())
-                {
-                    <img class="previous" src="_content/BlazorWeather.Core/icons/caret-left.svg" @onclick="PreviousPinnedLocation" alt="Previous pinned location" />
-                    <img class="next" src="_content/BlazorWeather.Core/icons/caret-right.svg" @onclick="NextPinnedLocation" alt="Next pinned location" />
-                }
-            </div>
+            @if (currentWeather == null)
+            {
+                <p><em>Search for a city, or use your current location.</em></p>
+            }
+            else
+            {
+                <div class="pinnable-location">
+                    <h1>@currentLocation.LocalizedName.ToUpper()</h1>
+                    <PushPin IsChecked="@currentLocation.IsPinned" IsCheckedChanged="PinLocation" />
+                </div>
 
-            <div class="temperature">
-                @GetTemperature()
-                <TemperatureUnitPicker @bind-TemperatureUnit="temperatureUnit" />
-            </div>
-            <div class="summary">
-                <img class="weather-img" src="@currentWeather.WeatherUri" alt="@currentWeather.WeatherText" />
-                @currentWeather.WeatherText
-            </div>
-            <div class="update-info">Updated @GetTimeToDisplay()</div>
-            <div class="metrics">
-                <div>UV index <p>@currentWeather.UVIndex</p></div>
-                <div>Barometer <p>@currentWeather.Pressure</p></div>
-                <div>Humidity <p>@currentWeather.RelativeHumidity%</p></div>
-                <div>Wind <p>@currentWeather.WindSpeed <span class="wind-details">mph @currentWeather.WindDirection</span></p></div>
-            </div>
-        }
+                <div class="location-carousel">
+                    <img src="@GetCurrentLocationImage()" />
+                    @if (ShowPinnedLocations())
+                    {
+                        <img class="previous" src="_content/BlazorWeather.Core/icons/caret-left.svg" @onclick="PreviousPinnedLocation" alt="Previous pinned location" />
+                        <img class="next" src="_content/BlazorWeather.Core/icons/caret-right.svg" @onclick="NextPinnedLocation" alt="Next pinned location" />
+                    }
+                </div>
+
+                <div class="temperature">
+                    @GetTemperature()
+                    <TemperatureUnitPicker @bind-TemperatureUnit="temperatureUnit" />
+                </div>
+                <div class="summary">
+                    <img class="weather-img" src="@currentWeather.WeatherUri" alt="@currentWeather.WeatherText" />
+                    @currentWeather.WeatherText
+                </div>
+                <div class="update-info">Updated @GetTimeToDisplay()</div>
+                <div class="metrics">
+                    <div>UV index <p>@currentWeather.UVIndex</p></div>
+                    <div>Barometer <p>@currentWeather.Pressure</p></div>
+                    <div>Humidity <p>@currentWeather.RelativeHumidity%</p></div>
+                    <div>Wind <p>@currentWeather.WindSpeed <span class="wind-details">mph @currentWeather.WindDirection</span></p></div>
+                </div>
+            }
+        </div>
+        <h1>Google Map</h1>
+        <GoogleMap @ref="@map1" Id="map1" Options="@mapOptions"></GoogleMap>
     </div>
-</div>
 
 @code {
     WeatherResponse currentWeather;
@@ -54,6 +59,23 @@
     Location currentLocation;
     IList<Location> pinnedLocations;
     int pinnedLocationIndex;
+    private GoogleMap map1;
+    private MapOptions mapOptions;
+
+    protected override void OnInitialized()
+    {
+        mapOptions = new MapOptions()
+        {
+            Zoom = 13,
+            Center = new LatLngLiteral()
+            {
+                Lat = 13.505892,
+                Lng = 100.8162
+            },
+            MapTypeId = MapTypeId.Roadmap
+        };
+
+    }
 
     CancellationTokenSource streamingWeatherCTS = new CancellationTokenSource();
 
@@ -81,7 +103,14 @@
 
     void LocationChanged(Location newLocation)
     {
+        Console.WriteLine("hello");
         currentLocation = pinnedLocations.FirstOrDefault(l => l.Key == newLocation.Key) ?? newLocation;
+        var position = new LatLngLiteral
+        {
+            Lat = currentLocation.GeoPosition.Latitude,
+            Lng = currentLocation.GeoPosition.Longitude
+        };
+        map1.InteropObject.SetCenter(position);
         streamingWeatherCTS.Cancel();
         streamingWeatherCTS.Dispose();
         streamingWeatherCTS = new CancellationTokenSource();

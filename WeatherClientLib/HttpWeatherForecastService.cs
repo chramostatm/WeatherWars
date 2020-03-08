@@ -20,8 +20,9 @@ namespace WeatherClientLib
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://dataservice.accuweather.com/");
-
-            apiKey = "Ge3HSKIbQTj53yzMy1bGGy1dBpDOuXyY";
+            //Ge3HSKIbQTj53yzMy1bGGy1dBpDOuXyY
+            
+            apiKey = "wcDs5Agnj1AWC3kyYq8aQmhS7hSNIBWU";
         }
 
         public async Task<Location[]> GetLocationsByText(string search, CancellationToken cancellationToken)
